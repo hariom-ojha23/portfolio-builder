@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config'
 import { UserModule } from './modules/user/user.module'
 import { DatabaseModule } from './database/database.module'
 import { SnowflakeModule } from './core/snowflake/snowflake.module'
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { SnowflakeModule } from './core/snowflake/snowflake.module'
     DatabaseModule,
     SnowflakeModule,
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
