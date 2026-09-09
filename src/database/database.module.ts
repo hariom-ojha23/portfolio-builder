@@ -22,8 +22,7 @@ import { CustomNamingStrategy } from '../core/strategies/naming.strategy'
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         migrations: [__dirname + '/migrations/*{.ts,.js}'],
 
-        autoLoadEntities: true,
-        synchronize: false,
+        synchronize: true,
       }),
     }),
   ],
