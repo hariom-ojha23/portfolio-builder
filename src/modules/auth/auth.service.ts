@@ -4,6 +4,7 @@ import { UserService } from '../user/user.service'
 import * as argon2 from 'argon2'
 import { LoginDto } from './dto/login.dto'
 import { JwtService } from '@nestjs/jwt'
+import { User } from '../user/entity/user.entity'
 
 @Injectable()
 export class AuthService {
@@ -68,5 +69,10 @@ export class AuthService {
     return this.jwtService.signAsync({
       sub: userId,
     })
+  }
+
+  async getCurrentUser(userId: string): Promise<User | null> {
+    const user = await this.userService.findById(userId)
+    return user
   }
 }

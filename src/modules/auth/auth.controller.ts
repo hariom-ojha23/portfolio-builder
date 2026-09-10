@@ -1,10 +1,11 @@
-import { Body, Controller, Post, Res } from '@nestjs/common'
+import { Body, Controller, Get, Post, Res } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { RegisterDto } from './dto/register.dto'
 import { NODE_ENV } from '../../core/enums/node-env.enum'
 import { LoginDto } from './dto/login.dto'
 import type { Response } from 'express'
 import { Public } from '../../core/decorators/public.decorator'
+import { CurrentUserId } from '../../core/decorators/current-user.decorator'
 
 @Controller('auth')
 export class AuthController {
@@ -51,5 +52,11 @@ export class AuthController {
     res.clearCookie('access_token', this.accessTokenCookieOptions)
 
     return { message: 'Logged out successfully' }
+  }
+
+  @Get('me')
+  async getMe(@CurrentUserId() userId: string) {
+    const user = await this.authService.getCurrentUser(userId)
+    return { user }
   }
 }
