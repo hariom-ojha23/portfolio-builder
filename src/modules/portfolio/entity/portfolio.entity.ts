@@ -15,6 +15,9 @@ export class Portfolio {
   @PrimaryColumn({ type: 'varchar', length: 25 })
   id!: string
 
+  @Column({ type: 'varchar', length: 100 })
+  name!: string
+
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user!: User
