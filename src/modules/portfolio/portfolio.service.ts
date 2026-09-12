@@ -14,7 +14,10 @@ export class PortfolioService {
     private readonly snowflakeService: SnowflakeService,
   ) {}
 
-  async createPortfolio(userId: string, dto: CreatePortfolioDto): Promise<Portfolio> {
+  async createPortfolio(
+    userId: string,
+    dto: CreatePortfolioDto,
+  ): Promise<Portfolio> {
     const portfolio = this.portfolioRepo.create({
       id: this.snowflakeService.generate().toString(),
       userId,
@@ -33,7 +36,10 @@ export class PortfolioService {
     })
   }
 
-  async findPortfolioById(portfolioId: string, userId: string): Promise<Portfolio> {
+  async findPortfolioById(
+    portfolioId: string,
+    userId: string,
+  ): Promise<Portfolio> {
     const portfolio = await this.portfolioRepo.findOne({
       where: {
         id: portfolioId,
@@ -68,9 +74,11 @@ export class PortfolioService {
   }
 
   async removePortfolio(portfolioId: string, userId: string): Promise<void> {
+    const portfolio = await this.findPortfolioById(portfolioId, userId)
+
     const result = await this.portfolioRepo.delete({
+      id: portfolio.id,
       userId,
-      id: portfolioId,
     })
 
     if (result.affected === 0) {
