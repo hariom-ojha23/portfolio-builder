@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from 'typeorm'
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, UpdateDateColumn } from 'typeorm'
+import { Portfolio } from '../../portfolio/entity/portfolio.entity'
 
 @Entity('users')
 export class User {
@@ -16,6 +17,9 @@ export class User {
 
   @Column({ type: 'boolean', default: true })
   isActive!: boolean
+
+  @OneToMany(() => Portfolio, (portfolio) => portfolio.user)
+  portfolios!: Portfolio[]
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt!: Date

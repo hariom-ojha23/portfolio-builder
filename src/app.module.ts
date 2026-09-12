@@ -8,6 +8,7 @@ import { SnowflakeModule } from './core/snowflake/snowflake.module'
 import { AuthModule } from './modules/auth/auth.module'
 import { APP_GUARD } from '@nestjs/core'
 import { JwtAuthGuard } from './core/guards/jwt-auth/jwt-auth.guard'
+import { PortfolioModule } from './modules/portfolio/portfolio.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { JwtAuthGuard } from './core/guards/jwt-auth/jwt-auth.guard'
     SnowflakeModule,
     UserModule,
     AuthModule,
+    PortfolioModule,
   ],
   controllers: [AppController],
   providers: [
