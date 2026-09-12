@@ -1,20 +1,22 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { PortfolioController } from './portfolio.controller';
-import { PortfolioService } from './portfolio.service';
+jest.mock('@nestjs/typeorm', () => ({ InjectRepository: () => () => {} }))
+
+import { Test, TestingModule } from '@nestjs/testing'
+import { PortfolioController } from './portfolio.controller'
+import { PortfolioService } from './portfolio.service'
 
 describe('PortfolioController', () => {
-  let controller: PortfolioController;
+  let controller: PortfolioController
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [PortfolioController],
       providers: [PortfolioService],
-    }).compile();
+    }).compile()
 
-    controller = module.get<PortfolioController>(PortfolioController);
-  });
+    controller = module.get<PortfolioController>(PortfolioController)
+  })
 
   it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
-});
+    expect(controller).toBeDefined()
+  })
+})

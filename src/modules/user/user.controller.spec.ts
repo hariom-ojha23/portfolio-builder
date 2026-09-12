@@ -1,20 +1,18 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { UserController } from './user.controller';
-import { UserService } from './user.service';
+jest.mock('@nestjs/typeorm', () => ({ InjectRepository: () => () => {} }))
+
+import { UserController } from './user.controller'
+import { UserService } from './user.service'
 
 describe('UserController', () => {
-  let controller: UserController;
+  let controller: UserController
+  let service: jest.Mocked<UserService>
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [UserController],
-      providers: [UserService],
-    }).compile();
-
-    controller = module.get<UserController>(UserController);
-  });
+    service = {} as unknown as jest.Mocked<UserService>
+    controller = new UserController(service)
+  })
 
   it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
-});
+    expect(controller).toBeDefined()
+  })
+})
