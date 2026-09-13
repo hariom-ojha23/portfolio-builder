@@ -73,7 +73,10 @@ export class PortfolioService {
     return this.portfolioRepo.save(portfolio)
   }
 
-  async removePortfolio(portfolioId: string, userId: string): Promise<void> {
+  async removePortfolio(
+    portfolioId: string,
+    userId: string,
+  ): Promise<{ message: string }> {
     const portfolio = await this.findPortfolioById(portfolioId, userId)
 
     const result = await this.portfolioRepo.delete({
@@ -84,5 +87,7 @@ export class PortfolioService {
     if (result.affected === 0) {
       throw new NotFoundException('Portfolio not found')
     }
+
+    return { message: 'Portfolio deleted successfully' }
   }
 }
