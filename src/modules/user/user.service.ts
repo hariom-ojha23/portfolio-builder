@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { User } from './entity/user.entity'
 import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { SnowflakeService } from '../../core/snowflake/snowflake.service'
 import { CreateUserDto } from './dto/create-user.dto'
+import { UpdateUserDto } from './dto/update-user.dto'
+import { UserProfile } from '../../core/interfaces/user-profile.interface'
 
 @Injectable()
 export class UserService {
@@ -28,8 +30,25 @@ export class UserService {
     })
   }
 
-  async findById(id: string): Promise<User | null> {
-    return this.userRepo.findOneBy({ id })
+  async findById(userId: string): Promise<User | null> {
+    return this.userRepo.findOneBy({ id: userId })
+  }
+
+  async getUserProfile(userId: string): Promise<UserProfile> {
+    const user = await this.findById(userId)
+
+    if (!user) {
+      throw new NotFoundException('User not found')
+    }
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      avatarUrl: user.avatarUrl,
+      createdAt: user.createdAt,
+      isActive: user.isActive,
+    }
   }
 
   async createUser(dto: CreateUserDto): Promise<User> {
@@ -41,5 +60,28 @@ export class UserService {
     })
 
     return this.userRepo.save(user)
+  }
+
+  async updateUserProfile(
+    userId: string,
+    dto: UpdateUserDto,
+  ): Promise<UserProfile> {
+    const user = await this.findById(userId)
+    if (!user) {
+      throw new NotFoundException('User not found')
+    }
+
+    Object.assign(user, dto)
+
+    await this.userRepo.save(user)
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      avatarUrl: user.avatarUrl,
+      createdAt: user.createdAt,
+      isActive: user.isActive,
+    }
   }
 }
