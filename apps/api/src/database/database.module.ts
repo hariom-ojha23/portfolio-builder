@@ -19,12 +19,12 @@ import { CustomNamingStrategy } from '../core/strategies/naming.strategy'
 
         namingStrategy: new CustomNamingStrategy(),
 
-        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         migrations: [__dirname + '/migrations/*{.ts,.js}'],
 
+        autoLoadEntities: true,
         synchronize: true,
       }),
     }),
   ],
 })
-export class DatabaseModule {}
+export class DatabaseModule { }

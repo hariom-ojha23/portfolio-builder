@@ -9,4 +9,4 @@ import { Portfolio } from './entity/portfolio.entity'
   providers: [PortfolioService],
   imports: [TypeOrmModule.forFeature([Portfolio])],
 })
-export class PortfolioModule {}
+export class PortfolioModule { }
