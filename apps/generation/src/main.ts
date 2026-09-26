@@ -1,10 +1,12 @@
 import { NestFactory } from '@nestjs/core'
-import { GenerationModule } from './generation.module'
+import { GenerationModule, ObserveInstrument } from './generation.module'
 
 import cookieParser from 'cookie-parser'
 
 async function bootstrap() {
-  const app = await NestFactory.create(GenerationModule)
+  const app = await NestFactory.create(GenerationModule, {
+    instrument: ObserveInstrument,
+  })
 
   app.use(cookieParser())
 

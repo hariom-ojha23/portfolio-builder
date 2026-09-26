@@ -8,13 +8,21 @@ import { SnowflakeModule } from './core/snowflake/snowflake.module'
 import { AuthModule } from './modules/auth/auth.module'
 import { APP_GUARD } from '@nestjs/core'
 import { JwtAuthGuard } from './core/guards/jwt-auth/jwt-auth.guard'
-import { PortfolioModule } from './modules/portfolio/portfolio.module';
+import { PortfolioModule } from './modules/portfolio/portfolio.module'
+import { StorageModule } from './modules/storage/storage.module'
+import { ServeStaticModule } from '@nestjs/serve-static'
+import { join } from 'path'
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     DatabaseModule,
     SnowflakeModule,
+    StorageModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'uploads'),
+      serveRoot: '/uploads',
+    }),
     UserModule,
     AuthModule,
     PortfolioModule,
@@ -28,4 +36,4 @@ import { PortfolioModule } from './modules/portfolio/portfolio.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }
