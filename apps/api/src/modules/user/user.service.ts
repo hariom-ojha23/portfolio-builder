@@ -6,12 +6,16 @@ import { SnowflakeService } from '../../core/snowflake/snowflake.service'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { UserProfile } from '../../core/interfaces/user-profile.interface'
+import { StorageService } from '../storage/storage.service'
+import { FileProcessorService } from '../storage/processors/file-processor.service'
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     private readonly snowflakeService: SnowflakeService,
+    private readonly storageService: StorageService,
+    private readonly fileProcessorService: FileProcessorService,
   ) {}
 
   async findByEmail(email: string): Promise<User | null> {
@@ -25,6 +29,7 @@ export class UserService {
         id: true,
         name: true,
         email: true,
+        avatarUrl: true,
         passwordHash: true,
       },
     })
@@ -82,6 +87,27 @@ export class UserService {
       avatarUrl: user.avatarUrl,
       createdAt: user.createdAt,
       isActive: user.isActive,
+    }
+  }
+
+  async uploadAvatar(userId: string, file: Express.Multer.File) {
+    const user = await this.findById(userId)
+    if (!user) {
+      throw new NotFoundException('User not found')
+    }
+
+    const processedBuffer = await this.fileProcessorService.process(file.buffer)
+    const filePath = `avatars/${userId}.webp`
+
+    await this.storageService.upload(processedBuffer, filePath)
+
+    const avatarUrl = await this.storageService.getUrl(filePath)
+
+    user.avatarUrl = avatarUrl
+    await this.userRepo.save(user)
+
+    return {
+      url: avatarUrl,
     }
   }
 }
